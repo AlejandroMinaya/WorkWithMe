@@ -6,13 +6,22 @@
 	--blue: #009ef1;
 }
 
+body
+{
+	margin: 0;
+}
+
 .flex
 {
 	display: flex;
+	flex-wrap: wrap;
+}
+
+.center
+{
 	justify-content: center;
 	align-items: center;
 	align-conten: center;
-	flex-wrap: wrap;
 }
 
 .distribute
@@ -55,7 +64,22 @@
 .widget
 {
 	width: calc(334.714 * var(--screen-ratio));	
-	height: calc(670 * var(--screen-ratio));
-	border: 3pt solid #009ef1;
-	box-shadow: 0 0 10px 0 #009
+	height: calc(600 * var(--screen-ratio));
+	min-width: 334.714px;
+	min-height: 600px;
+	border-radius: calc(8 * var(--screen-ratio));
+	border: calc(3 * var(--screen-ratio)) solid var(--blue);
+	box-shadow: calc(11 * var(--screen-ratio)) calc(11 * var(--screen-ratio)) 0 calc(1 * var(--screen-ratio)) var(--blue);
+}
+
+@media (max-width: 1023px)
+{
+	:root
+	{
+		--screen-width: 475;
+	}
+	.row
+	{
+		flex-wrap: wrap;
+	}
 }
