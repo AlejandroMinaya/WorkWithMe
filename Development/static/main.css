@@ -1,0 +1,61 @@
+/* MAIN CSS */
+:root
+{
+	--screen-width: 1280;
+	--screen-ratio: calc(100vw/var(--screen-width));
+	--blue: #009ef1;
+}
+
+.flex
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-conten: center;
+	flex-wrap: wrap;
+}
+
+.distribute
+{
+	justify-content: space-around;
+}
+
+.justify
+{
+	justify-content: space-between;
+}
+
+.vertical-distribute
+{
+	align-items: space-around;
+}
+
+.vertical-justify
+{
+	align-items: space-between;
+}
+
+.main-container
+{
+	width: 100vw;
+}
+
+.row
+{
+	display: flex;
+	flex-wrap: nowrap;
+	flex-basis: 100%;
+}
+
+.row > *
+{
+	flex-basis: auto;
+}
+
+.widget
+{
+	width: calc(334.714 * var(--screen-ratio));	
+	height: calc(670 * var(--screen-ratio));
+	border: 3pt solid #009ef1;
+	box-shadow: 0 0 10px 0 #009
+}
