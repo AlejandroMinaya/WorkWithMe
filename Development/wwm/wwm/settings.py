@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'projects.apps.ProjectsConfig',
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -68,6 +70,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'wwm.wsgi.application'
+
+SESSION_SAVE_EVERY_REQUEST = True
 
 
 # Database

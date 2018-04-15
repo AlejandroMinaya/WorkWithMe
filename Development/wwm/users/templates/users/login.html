@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="google-signin-client_id" content="878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com">
+	</head>
+	<body>
+		<div class="g-signin2" data-onsuccess="onSignIn"></div>
+		<a href="#" onclick="signOut();">Sign out</a>
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script>
+			function onSignIn(googleUser)
+			{
+				var profile = googleUser.getBasicProfile();
+				var id_token = googleUser.getAuthResponse().id_token;
+				$.post('checkUser/', {
+					idToken: id_token,
+					firstName: profile.getName().split(" ")[0],
+					lastName: profile.getName().split(" ")[1], //REMEMBER LATIN COUNTRY 4 NAMES
+					email: profile.getEmail()
+				
+				}, function(data, status){location.href = "/";});
+			}
+			function signOut() 
+			{
+				var auth2 = gapi.auth2.getAuthInstance();
+				auth2.signOut().then(function () {
+				  console.log('User signed out.');
+				});
+			  }
+		</script>
+	</body>
+</html>
