@@ -22,7 +22,30 @@
 		<div>
 			<ul>
 				{%for project in projects%}
-				<li>{{project.id}} {{project.name}} <br> {{project.progress}}</li>
+				<li>{{project.id}} - {{project.name}} 					
+					(<a href="javascript:void(0)" onclick="leaveProjectTest({{project.id}})">Leave</a>
+					{%if user == project.projectOwner %}
+					| <a href="javascript:void(0)" onclick="deleteProjectTest({{project.id}})">Delete</a> 
+						{% endif %}
+					)<br>
+					Progress: {{project.progress}}<br>
+					Members:
+					<ul>
+						{%for member in project.members.all%}
+						<li>{{member.firstName}} {{member.lastName}} - {{member.email}}
+							{%if project.projectOwner == member %}
+							(Owner)
+							{% endif %}
+							{%if user == project.projectOwner and member !=  user%}
+							<a href="javascript:void(0)" onclick="removeMemberTest({{project.id}}, {{member.id}})"> (Remove Member) </a>
+							{% endif %}
+						</li>
+						{%endfor%}
+					</ul><br> 
+					Due: {{project.dueDate}}<br>
+					<a href="javascript:void(0)" onclick="addMemberTest({{project.id}},6)"> Add Member </a>
+				</li>
+				<br><br>
 				{%endfor%}
 			</ul>
 		</div>	
@@ -54,7 +77,69 @@
 					location.href = "/logout";
 				});
 			}
+
+			function addProjectTest()
+			{
+				$.post("/projects/add",
+					{
+						name: "Test Project",
+						dueDay: 21,
+						dueYear: 2019,
+						dueMonth: 05
+					}, function(data, status){
+						location.href="";
+					});
+
+			}
+
+			function deleteProjectTest(_projectID)
+			{
+				$.post("/projects/delete",
+					{
+						projectID: _projectID,
+					},
+					function(data, status){
+						location.href="";
+					});
+			}
+
+			function leaveProjectTest(_projectID)
+			{
+				$.post("/projects/leave",
+					{
+						projectID: _projectID,
+					},
+					function(data, status){
+						location.href="";
+					});
+			}
+
+			function addMemberTest(_projectID, _userID)
+			{
+				$.post("/projects/addMember",
+					{
+						projectID: _projectID,
+						userID: _userID,
+					},
+					function(data, status){
+						location.href="";
+					});
+			}
+
+			function removeMemberTest(_projectID, _userID)
+			{
+				$.post("/projects/removeMember",
+					{
+						projectID: _projectID,
+						userID: _userID,
+					},
+					function(data, status){
+						location.href="";
+					});
+			}
+			
 		</script>
 		<a href="javascript:void(0)" onclick="signOut();">Sign out</a>
+		<a href="javascript:void(0)" onclick="addProjectTest();">Add project</a>
 	</body>
 </html>

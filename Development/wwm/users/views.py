@@ -9,10 +9,10 @@ from .models import User
 # Create your views here.
 def index(request):
     try:
-        if request.session['userId'] == None:
+        if request.session['userID'] == None:
             redirect('/login')
         template = loader.get_template('users/index.html')
-        contextUser = User.objects.get(id=request.session['userId'])
+        contextUser = User.objects.get(id=request.session['userID'])
         context = {
                 'user': contextUser,
                 'tasks': contextUser.task_set.all(),
@@ -30,7 +30,7 @@ def login(request):
 
 
 def logout(request):
-    request.session.pop('userId', None)
+    request.session.pop('userID', None)
     return redirect('/login')
 
 
@@ -74,5 +74,5 @@ def checkUser(request):
         if user == False:
             user = createNewUser(request.POST) 
             mssg = "Create new user"
-        request.session["userId"] = user.id
+        request.session["userID"] = user.id
         return HttpResponse(mssg)
