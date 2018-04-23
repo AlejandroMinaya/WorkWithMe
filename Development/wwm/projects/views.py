@@ -4,22 +4,31 @@ from django.template import loader
 from users.models import User
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
-from .models import Project
+from .models import Project, Task
 
 EMPTY_REQUEST_MSSG = "Empty Request"
-PROJECT_NOT_FOUND_MSSG = "Project with id %s not found AND/OR User with id %s not found"
-USER_NOT_FOUND_MSSG = "User with id %s not found"
+PROJECT_NOT_FOUND_MSSG = "Project not found"
+TASK_NOT_FOUND_MSSG = "Task not found" 
+USER_NOT_FOUND_MSSG = "User not found"
 PERMISSION_DENIED_MSSG = "This user is not the owner of the project"
 
+# IMPORTANT !!!!#
+# Most of the methods at the end will have to create a RecentActivity object
+# to keep historical record of what has been done
+#
+# Also, we need the award system to be in place
 
     
 
 # Create your views here.
+
+# HTML PAGES
+# =====================================================
 def index(request):
-    # Dashboard
     template = loader('index.html')
     context = {}
     return HttpResponse("index")
+
 
 # GENERAL MANAGEMENT METHODS
 # =====================================================
@@ -32,6 +41,20 @@ def getUser(userID):
         return User.objects.get(id=userID)
     except:
         return None
+
+# -- VERIFY EXISTENCE
+def verifyExistence(**kwargs):
+    if "user" in kwargs:
+        for user in kwargs["user"]:
+            if user == None:
+                return HttpResponse(USER_NOT_FOUND_MSSG)
+    if "task" in kwargs:
+        if kwargs["task"] == None:
+            return HttpResponse(TASK_NOT_FOUND_MSSG)
+    if "project" in kwargs:
+        if kwargs["project"] == None:
+            return HttpResponse(PROJECT_NOT_FOUND_MSSG)
+    return True
 
 
 # PROJECT MANAGMENT METHODS
@@ -62,8 +85,9 @@ def getProject(projectID):
 def add(request):
     if request.method == 'POST':
         user = getUser(request.session["userID"])
-        if user == None:
-            return HttpResponse(USER_NOT_FOUND_MSSG % request.session["userID"])
+        verification = verifyExistence(user=[user])
+        if type(verification) == HttpResponse:
+            return verification
         _name = request.POST["name"]
         _dueDate = date(int(request.POST["dueYear"]), int(request.POST["dueMonth"]), int(request.POST["dueDay"]))  
         _projectOwner = user
@@ -91,11 +115,10 @@ def edit(request):
 def delete(request):
     if request.method == 'POST':
         project = getProject(request.POST["projectID"])
-        user = getuser(request.session["userID"])
-        if user == None:
-            return HttpResponse(USER_NOT_FOUND_MSSG % request.session["userID"])
-        if project == None:
-            return HttpResponse(PROJECT_NOT_FOUND_MSSG  % request.POST["projectID"])
+        user = getUser(request.session["userID"])
+        verification = verifyExistence(user=[user], project=project)
+        if type(verification) == HttpResponse:
+            return verification
         if user == project.projectOwner:
             project.delete()
             return HttpResponse("Project deleted")
@@ -114,10 +137,9 @@ def leave(request):
         newOwnerFound = False
         project = getProject(request.POST["projectID"])
         user = getUser(request.session["userID"])
-        if user == None:
-            return HttpResponse(USER_NOT_FOUND_MSSG % request.session["userID"])
-        if project == None:
-            return HttpResponse(PROJECT_NOT_FOUND_MSSG % request.POST["projectID"])
+        verification = verifyExistence(user=[user], project=project)
+        if type(verification) == HttpResponse:
+            return verification
         if user == project.projectOwner:
             for member in project.members.all():
                 if member != user:
@@ -148,12 +170,9 @@ def addMember(request):
         newMember = getUser(request.POST["userID"])
         user = getUser(request.session["userID"])
         project = getProject(request.POST["projectID"])
-        if newMember == None:
-            return HttpResponse(USER_NOT_FOUND_MSSG % request.POST["userID"])
-        if user == None:
-            return HttpResponse(USER_NOT_FOUND_MSSG % request.session["userID"])
-        if project == None:
-            return HttpResponse(PROJECT_NOT_FOUND_MSSG % request.POST["projectID"])
+        verification = verifyExistence(user=[user, newMember], project=project)
+        if type(verification) == HttpResponse:
+            return verification
         if user in project.members.all():
             project.members.add(newMember)
             return HttpResponse("User added to group")
@@ -172,12 +191,9 @@ def removeMember(request):
         user = getUser(request.session["userID"])
         removedMember = getUser(request.POST["userID"])
         project = getProject(request.POST["projectID"])
-        if user  == None:
-            return HttpResponse(USER_NOT_FOUND_MSSG % request.POST["userID"])
-        if removedMember  == None:
-            return HttpResponse(USER_NOT_FOUND_MSSG % request.POST["userID"])
-        if project == None:
-            return HttpResponse(PROJECT_NOT_FOUND_MSSG % request.POST["projectID"])
+        verification = verifyExistence(user=[user, removedMember], project=project)
+        if type(verification) == HttpResponse:
+            return verification
         if user == project.projectOwner:
             project.members.remove(removedMember)
             return HttpResponse("User removed")
@@ -201,9 +217,132 @@ def getTask(taskID):
 # -----------------------------------------------------
 # -- ADD A TASK
 # Add a new task to a project by one of its members
+#
+# Needs the POST arguments:
+#   > projectID
+# 
+#  (Task)
+#   > name
+#   > description
+#   > dueYear
+#   > dueMonth
+#   > dueDay
+#   > responsibleID
+@csrf_exempt
+def addTask(request):
+    if request.method == 'POST':
+        project = getProject(request.POST["projectID"])
+        user = getUser(request.session["userID"])
+        verification = verifyExistence(user=[user], project=project)
+        if type(verification) == HttpResponse:
+            return verification
+        if user in project.members.all():
+            task = Task()
+            task.name = request.POST["name"]
+            task.description = request.POST["description"]
+            task.project = project
+            task.dueDate = date(int(request.POST["dueYear"]), int(request.POST["dueMonth"]), int(request.POST["dueDay"]))
+            responsible = getUser(request.POST["responsibleID"])
+            if responsible == None or responsible not in project.members.all():
+                responsible = user
+            task.responsible = responsible
+            task.save()
+        return HttpResponse(PERMISSION_DENIED_MSSG)
+    return HttpResponse(EMPTY_REQUEST_MSSG)
+
+
 # -- EDIT A TASK
+
+
 # -- REMOVE A TASK
+# Remove a task by the project owner or task responsible
+#
+# Needs the POST arguments
+#   > taskID
+@csrf_exempt
+def removeTask(request):
+    if request.method == 'POST':
+        user = getUser(request.session["userID"])
+        task = getTask(request.POST["taskID"])
+        verification = verifyExistence(user=[user], task=task)
+        if type(verification) == HttpResponse:
+            return verification
+        if user == task.project.projectOwner or user == task.responsible:
+            task.delete()
+            return HttpResponse("Task deleted")
+        return HttpResponse(PERMISSION_DENIED_MSSG)
+    return HttpResponse(EMPTY_REQUEST_MSSG)
+
 # -- MARK A TASK FOR VERIFICATION
-# -- VERIIFY A TASK
+# Marks a task for verification by one of the team members
+#
+# Needs the POST argumets
+#   > taskID
+@csrf_exempt
+def markTaskForVerification(request):
+    if request.method == 'POST':
+        user = getUser(request.session["userID"])
+        task = getTask(request.POST["taskID"])
+        verification = verifyExistence(user=[user], task=task)
+        if type(verification) == HttpResponse:
+            return verification
+        if user != task.responsible and user != task.project.projectOwner:
+            return HttpResponse(PERMISSION_DENIED_MSSG)
+        successMssg = ""
+        if user == task.responsible:
+            task.status = 0
+            successMssg = "Task marked for verification"
+        if user == task.project.projectOwner:
+            task.status = 1
+            successMssg = "Task completed"
+        task.save()
+        return HttpResponse(successMssg)
+    return HttpResponse(EMPTY_REQUEST_MSSG)
+
+# -- VERIFY A TASK
+# Verify a task by a team member other than the responsible
+#
+# Needs the POST argumets
+#   > taskID
+@csrf_exempt
+def verifyTask(request):
+    if request.method == 'POST':
+        user = getUser(request.session["userID"])
+        task = getTask(request.POST["taskID"])
+        reject = bool(int(request.POST["reject"]))
+        verification = verifyExistence(user=[user], task=task)
+        if type(verification) == HttpResponse:
+            return verification
+        if user != task.responsible and user in task.project.members.all():
+            successMssg = ""
+            if reject:
+                task.status = 1
+            else:
+                task.status = -1
+            task.save()
+            return HttpResponse(successMssg)
+        return HttpResponse(PERMISSION_DENIED_MSSG)
+    return HttpResponse(EMPTY_REQUEST_MSSG)
+
 # -- CHANGE TASK RESPONSIBLE
+# Change the responsible member to a task 
+#
+# Needs the POST argumets
+#   > taskID
+#   > userID - new responsible
+@csrf_exempt
+def changeTaskResponsible(request):
+    if request.method == 'POST':
+        newResponsible = getUser(request.POST["userID"])
+        user = getUser(request.session["userID"])
+        task = getTask(request.POST["taskID"])
+        verification = verifyExistence(user=[user, newResponsible], task=task)
+        if type(verification) == HttpResponse:
+            return verification
+        if user == task.project.projectOwner:
+            task.responsible = newResponsible
+            task.save()
+        return HttpResponse(PERMISSION_DENIED_MSSG)
+    return HttpResponse(EMPTY_REQUEST_MSSG)
+
 # -- REMOVE RESPONSIBLE FROM TASK
