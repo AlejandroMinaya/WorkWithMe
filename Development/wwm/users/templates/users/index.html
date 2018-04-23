@@ -1,60 +1,83 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" href="/static/css/main.css"/>
+		<title>WWM - Dashboard</title>
+		{% load static %}
+		<link href="{%static "users/css/main.css"%}" rel="stylesheet">
 	</head>
 	<body>
-		<!-- RECENT ACTIVTY -->
-		<div>
-		
+		<!-- DASHBOARD -->
+		<div class="main-container flex">
+			<!-- HEADER MENU -->
+			<div id="header-menu" class="row justify">
+				<!-- LOGO AND LINKS -->
+				<nav class="row">
+					<ul class="row distribute vertical-center">
+						<li id="logo">
+							<img src="{%static "assets/logo.svg"%}"/>
+						</li>
+						<li><a href="/" class="nav-link">Dashboard</a></li>
+						<li><a href="projects" class="nav-link">Projects</a></li>
+					</ul>
+				</nav>
+			</div>
+			<div class="row distribute">
+				<div class="widget flex vertical-top">
+					<h1>Recent Activity</h1>
+					<div class="flex widget-content vertical-distribute">
+					</div>
+					<div class="flex widget-quick-access">
+					</div>
+				</div>
+				<div class="widget flex vertical-top">
+					<h1>Tasks</h1>
+					<div class="flex widget-content vertical-top">
+						{% for task in user.task_set.all %}
+						<div class="row task">
+							<div class="complete-button"></div>
+							<p>{{task.name}}</p>
+						</div>
+						{% endfor %}
+					</div>
+					<div class="flex widget-quick-access">
+						<a href="javascript:void(0)"><img src="{%static "assets/add-icon.svg" %}"/></a>
+					</div>
+				</div>
+				<div class="widget flex vertical-top">
+					<h1>Projects</h1>
+					<div class="flex widget-content vertical-top">
+						{% for project in user.project_set.all %}
+						<div class="flex project">
+							<div class="row justify">
+								<h3>{{project.name}}</h3>
+								<p>{{project.dueDate}}</p>
+							</div>
+							<div class="flex left progress">
+								{% if project.progress >= 75 %}
+									<div class="progress-bar" style="flex: 0 0 calc(100% * calc({{project.progress}}/100)); background-color: var(--green);">
+									</div>
+								{% elif project.progress >= 33 %}
+									<div class="progress-bar" style="flex: 0 0 calc(100% * calc({{project.progress}}/100)); background-color: var(--yellow);">
+									</div>
+								{% else %}
+									<div class="progress-bar" style="flex: 0 0 calc(100% * calc({{project.progress}}/100)); background-color: var(--red);">
+									</div>
+								{% endif %}
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+					<div class="flex widget-quick-access">
+						<a href="javascript:void(0)"><img src="{%static "assets/add-icon.svg" %}"/></a>
+					</div>
+				</div>
+			</div>
 		</div>
-
-		<!-- TASKS -->
-		<div>
-			<ul>
-				{%for task in tasks%}
-				<li>{{task.id}} {{task.name}} <br> {{task.description}}</li>
-				{%endfor%}
-			</ul>
-		</div>
-
-		<!-- PROJECTS -->
-		<div>
-			<ul>
-				{%for project in projects%}
-				<li>{{project.id}} {{project.name}} <br> {{project.progress}}</li>
-				{%endfor%}
-			</ul>
-		</div>	
-		<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script>
-			//SIGNOUT
-			if(typeof gapi == 'undefined')
-			{
-				init()
-			}
-			else if(typeof gapi.auth2 == 'undefined')
-			{
-				init()
-			}
-			function init()
-			{
-				gapi.load('auth2', function(){
-					gapi.auth2.init(
-						{client_id: '878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com'
-						});
-				});
-			}
-			function signOut() 
-			{
-				var auth2 = gapi.auth2.getAuthInstance();
-				auth2.signOut().then(function () {
-				 	console.log('User signed out.');
-					location.href = "/logout";
-				});
-			}
+		<script src="http://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous">
 		</script>
-		<a href="javascript:void(0)" onclick="signOut();">Sign out</a>
+		<script src="{% static "scripts/main.js" %}">
+		</script>
 	</body>
 </html>

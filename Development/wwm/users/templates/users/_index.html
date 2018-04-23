@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		{% load static %}
+		<link rel="stylesheet" href="{% static "users/css/main.css" %}"/>
+	</head>
+	<body>
+		<!-- RECENT ACTIVTY -->
+		<div>
+		
+		</div>
+
+		<!-- TASKS -->
+		<div>
+			<ul>
+				{%for task in tasks%}
+				<li>{{task.id}} {{task.name}} <br> {{task.description}}</li>
+				{%endfor%}
+			</ul>
+		</div>
+
+		<!-- PROJECTS -->
+		<div>
+			<ul>
+				{%for project in projects%}
+				<li>{{project.id}} - {{project.name}} 					
+					(<a href="javascript:void(0)" onclick="leaveProjectTest({{project.id}})">Leave</a>
+					{%if user == project.projectOwner %}
+					| <a href="javascript:void(0)" onclick="deleteProjectTest({{project.id}})">Delete</a>{% endif %})<br>
+					Progress: {{project.progress}}<br>
+					Members:
+					<ul>
+						{%for member in project.members.all%}
+						<li>{{member.firstName}} {{member.lastName}} - {{member.email}}
+							{%if project.projectOwner == member %}
+							(Owner)
+							{% endif %}
+							{%if user == project.projectOwner and member !=  user%}
+							<a href="javascript:void(0)" onclick="removeMemberTest({{project.id}}, {{member.id}})"> (Remove Member) </a>
+							{% endif %}
+						</li>
+						{%endfor%}
+					</ul><br> 
+					Tasks (<a href="javascript:void(0)" onclick="addTaskTest({{project.id}})"> Add New Task </a>)
+					<ul>
+						{% for task in project.task_set.all %}
+						<li>{{task.name}} - (
+							{%if user == task.responsible or user == project.projectOwner %} 
+							<a href="javascript:void(0)" onclick="removeTaskTest({{task.id}})"> Delete </a> 
+							{% endif %}
+							{% if task.status == -1 and user == task.responsible %}
+							 |<a href="javascript:void(0)" onclick="markForVerificationTest({{task.id}})"> Mark for verification </a> 
+							{% endif %}
+							{% if task.status == -1 and user != task.responsible and user == project.projectOwner %}
+							 |<a href="javascript:void(0)" onclick="markForVerificationTest({{task.id}})"> Mark as complete (Override) </a>
+							{% endif %}
+							{% if task.status == 0 and user != task.responsible %}
+							 |<a href="javascript:void(0)" onclick="verifyTaskTest({{task.id}}, 1)"> Verify </a>
+							 |<a href="javascript:void(0)" onclick="verifyTaskTest({{task.id}}, 0)"> Reject </a>
+							{% endif %}
+							{% if user == project.projectOwner %}
+							 |<a href="javascript:void(0)" onclick="changeResponsibleTest({{task.id}})"> Change Responsible </a> 
+							{% endif %}
+							)
+							<br>{{task.responsible.firstName}} {{task.responsible.lastName}}<br>
+							{{task.description}}</li>
+						{% endfor %}
+					</ul>
+					Due: {{project.dueDate}}<br>
+					<a href="javascript:void(0)" onclick="addMemberTest({{project.id}},6)"> Add Member </a>
+				</li>
+				<br><br>
+				{%endfor%}
+			</ul>
+		</div>	
+		<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script>
+			//SIGNOUT
+			if(typeof gapi == 'undefined')
+			{
+				init()
+			}
+			else if(typeof gapi.auth2 == 'undefined')
+			{
+				init()
+			}
+			function init()
+			{
+				gapi.load('auth2', function(){
+					gapi.auth2.init(
+						{client_id: '878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com'
+						});
+				});
+			}
+			function signOut() 
+			{
+				var auth2 = gapi.auth2.getAuthInstance();
+				auth2.signOut().then(function () {
+				 	console.log('User signed out.');
+					location.href = "/logout";
+				});
+			}
+
+			function addProjectTest()
+			{
+				$.post("/projects/add",
+					{
+						name: "Test Project",
+						dueDay: 21,
+						dueYear: 2019,
+						dueMonth: 05
+					}, function(data, status){
+						location.href="";
+					});
+
+			}
+
+			function deleteProjectTest(_projectID)
+			{
+				$.post("/projects/delete",
+					{
+						projectID: _projectID,
+					},
+					function(data, status){
+						location.href="";
+					});
+			}
+
+			function leaveProjectTest(_projectID)
+			{
+				$.post("/projects/leave",
+					{
+						projectID: _projectID,
+					},
+					function(data, status){
+						location.href="";
+					});
+			}
+
+			function addMemberTest(_projectID, _userID)
+			{
+				$.post("/projects/addMember",
+					{
+						projectID: _projectID,
+						userID: _userID,
+					},
+					function(data, status){
+						location.href="";
+					});
+			}
+
+			function removeMemberTest(_projectID, _userID)
+			{
+				$.post("/projects/removeMember",
+					{
+						projectID: _projectID,
+						userID: _userID,
+					},
+					function(data, status){
+						location.href="";
+					});
+			}
+			function addTaskTest(_projectID)
+			{
+				$.post("/tasks/add",
+					{
+						projectID: _projectID,
+						dueYear: 2018,
+						dueMonth: 12,
+						dueDay: 24,
+						name: "Test task",
+						description: "This is a test task",
+						responsibleID: 6,
+					},
+					function(data, status)
+					{
+						location.href="";
+					});
+			}
+			function removeTaskTest(_taskID)
+			{
+				$.post("/tasks/remove",
+					{
+						taskID: _taskID,
+					},
+					function(data, status)
+					{
+						location.href="";
+					});
+			}
+			function markForVerificationTest(_taskID)
+			{
+				$.post("/tasks/markTaskForVerification",
+					{
+						taskID: _taskID,
+					},
+					function(data, status)
+					{
+						location.href="";
+					});
+			}
+			function verifyTaskTest(_taskID, _reject) 
+			{
+				$.post("/tasks/verify",
+					{
+						taskID: _taskID,
+						reject: _reject, 
+					},
+					function(data, status)
+					{
+						location.href="";
+					});
+			}
+			function changeResponsible(_taskID)
+			{
+				$.post("/tasks/changeResponsibleTest",
+					{
+						taskID: _taskID,
+						userID: 5,
+						
+					},
+					function(data, status)
+					{
+						location.href="";
+					});
+			}
+			
+		</script>
+		<a href="javascript:void(0)" onclick="signOut();">Sign out</a>
+		<a href="javascript:void(0)" onclick="addProjectTest();">Add project</a>
+	</body>
+</html>

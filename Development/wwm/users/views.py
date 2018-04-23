@@ -7,12 +7,15 @@ from google.auth.transport import requests
 from .models import User
 
 # Create your views here.
+
+# HTML PAGES
+# =====================================================
 def index(request):
     try:
-        if request.session['userId'] == None:
+        if request.session['userID'] == None:
             redirect('/login')
         template = loader.get_template('users/index.html')
-        contextUser = User.objects.get(id=request.session['userId'])
+        contextUser = User.objects.get(id=request.session['userID'])
         context = {
                 'user': contextUser,
                 'tasks': contextUser.task_set.all(),
@@ -22,19 +25,23 @@ def index(request):
     except KeyError:
         return redirect('/login')
 
-
 def login(request):
     template = loader.get_template('users/login.html')
     context = {}
     return HttpResponse(template.render(context, request))
 
-
 def logout(request):
-    request.session.pop('userId', None)
+    request.session.pop('userID', None)
     return redirect('/login')
 
 
-# CHECK USER VIEW
+
+# AUTHENTICATION METHODS
+# =====================================================
+# - PRIVATE METHODS
+# -----------------------------------------------------
+# -- VERIFY ID TOKEN
+# Verifies that the login attempt comes from Google
 def verifyIdToken(token):
     try:
         idInfo = id_token.verify_oauth2_token(token, requests.Request(), "878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com")
@@ -43,7 +50,8 @@ def verifyIdToken(token):
     except ValueError:
         return redirect('')
 
-
+# -- VERIFY USER EXISTENCE
+# Using the email as a unique key, verifies if user exist in the database.
 def userExistence(userEmail):
     try:
         existingUser = User.objects.get(email=userEmail) 
@@ -51,7 +59,8 @@ def userExistence(userEmail):
     except:
         return False
 
-
+# -- CREATE NEW USER
+# Creates a new user in our database
 def createNewUser(userInfo):
     newUser = User()
     newUser.firstName = userInfo["firstName"]
@@ -63,7 +72,11 @@ def createNewUser(userInfo):
     newUser.save()
     return newUser
 
-
+# - FORM METHODS
+# -----------------------------------------------------
+# -- CHECK USER
+# Handles the user login. Makes sure that it is genuine through Google's OAuth id token.
+# Creates the user if it didnt exist before
 @csrf_exempt
 def checkUser(request):
     if request.method == 'POST':
@@ -74,5 +87,5 @@ def checkUser(request):
         if user == False:
             user = createNewUser(request.POST) 
             mssg = "Create new user"
-        request.session["userId"] = user.id
+        request.session["userID"] = user.id
         return HttpResponse(mssg)
