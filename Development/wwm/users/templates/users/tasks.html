@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tasks</title>
+	<meta name="google-signin-client_id" content="878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com">
+	{% load static %}
+	<link href="{%static "users/css/main.css"%}" rel="stylesheet">
+	<title>WWM - Tasks</title>
+</head>
+<body>
+	<div class="main-container flex">
+		<!-- HEADER MENU -->
+		<div id="header-menu" class="row justify">
+			<!-- LOGO AND LINKS -->
+			<nav class="row">
+				<ul class="row distribute vertical-center">
+					<li id="logo">
+						<img src="{%static "assets/logo.svg"%}"/>
+					</li>
+					<li><a href="/" class="nav-link">Dashboard</a></li>
+					<li><a href="projects" class="nav-link">Projects</a></li>
+					<li><a href="#" class = "nav-link" onclick="signOut();">Sign out</a></li>
+				</ul>
+			</nav>
+		</div>
+		<div id = "task-container">
+			<h1>
+				TASKS
+			</h1>
+			<div class = "task-box">
+				<div class = "task-title">
+					matematicas
+				</div>
+				<ul class = "task-list">
+					<li class = "task-task">
+						generar tabla de conversiones logaritmicas						
+						<span class="task-task-date">18/04/2018</span>
+						<span class = "task-task-mod">individual</span>
+					</li>
+					<li class = "task-task">
+						hacer encuesta a alumnos egresados el mes de abril y obtener media de edad
+						<span class="task-task-date">18/04/2018</span>
+						<span class = "task-task-mod">individual</span>
+					</li>
+					<li class = "task-task">
+						obtener las graficas de los datos obtenidos de las encuestas a los alumnos y comparar
+						los datos contra los del ciclo anterior para demostrar la viavilidad del estudio de las carreras
+						de ingenieria
+						<span class="task-task-date">18/04/2018</span>
+						<span class = "task-task-mod">individual</span>
+					</li>
+					<li class="task-task">
+						pasar la materia de interactive design foundations mostrando cosas cool de matematicas
+						<span class="task-task-date">18/04/2018</span>
+						<span class = "task-task-mod">individual</span>
+					</li>
+				</ul>
+			</div>
+			<div class = "task-box">
+				<div class = "task-title">
+					ciencias
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="http://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous">
+		</script>
+		<script src="{% static "scripts/main.js" %}">
+		</script>
+
+		<script type="text/javascript">
+			function signOut() 
+			{
+				var auth2 = gapi.auth2.getAuthInstance();
+				auth2.signOut().then(function () {
+				  console.log('User signed out.');
+				});
+			 }
+		</script>
+</body>
+</html>
