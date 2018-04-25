@@ -168,7 +168,7 @@ ul
 .widget-content
 {
 	height: 88%;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 /* WIDGET CONTENT */
@@ -233,3 +233,51 @@ ul
 	width: calc(105 * var(--screen-ratio));
 }
 
+/*Login page*/
+#login-main-container
+{
+	width: 100vw;
+	height: 100vh;
+	background-color: var(--blue);
+
+}
+
+#login-bg
+{
+	position: absolute;
+	width: 70vw;
+	height: 90vh;
+	margin-left: 15vw;
+	margin-top: 5vh;
+}
+
+#login-square
+{
+	position: relative;
+	background-color: white;
+	width: 40vw;
+	height: 50vh;
+	margin-top: 25vh;
+	margin-left: 30vw;
+	border-radius: 3%;
+	color: var(--blue);
+}
+
+#login-square h1
+{
+	text-align: center;
+	font-size: 3vw;
+}
+
+#login-prof-icon
+{
+	width: 20vw;
+	height: 24vh;
+	margin-left: 10vw;
+	margin-top: 5vh;
+}
+
+.login-google
+{
+	margin-left: 15.5vw;
+}
