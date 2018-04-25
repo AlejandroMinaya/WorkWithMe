@@ -2,10 +2,23 @@
 <html>
 	<head>
 		<meta name="google-signin-client_id" content="878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com">
+		{% load static %}
+		<link href="{%static "users/css/main.css"%}" rel="stylesheet">
 	</head>
 	<body>
-		<div class="g-signin2" data-onsuccess="onSignIn"></div>
-		<a href="#" onclick="signOut();">Sign out</a>
+		<div class="main-container flex">
+			<div id="login-main-container">
+					<img src="{%static "assets/white-logo.svg"%}" id = "login-bg">
+					<div id = "login-square">
+						<form>
+							<img src="{%static "assets/profile-icon.svg"%}" id = "login-prof-icon">
+							<h1>LOGIN</h1>
+							<div class="g-signin2 login-google" data-onsuccess="onSignIn"></div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 		<script src="https://apis.google.com/js/platform.js" async defer></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script>
@@ -21,13 +34,6 @@
 				
 				}, function(data, status){location.href = "/";});
 			}
-			function signOut() 
-			{
-				var auth2 = gapi.auth2.getAuthInstance();
-				auth2.signOut().then(function () {
-				  console.log('User signed out.');
-				});
-			  }
 		</script>
 	</body>
 </html>
