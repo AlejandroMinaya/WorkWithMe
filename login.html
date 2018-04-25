@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="google-signin-client_id" content="878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com">
+		{% load static %}
+		<link href="{%static "users/css/main.css"%}" rel="stylesheet">
+	</head>
+	<body>
+		<div class="main-container flex">
+			<div id="login-main-container">
+					<img src="{%static "assets/white-logo.svg"%}" id = "login-bg">
+					<div id = "login-square">
+						<form>
+							<img src="{%static "assets/profile-icon.svg"%}" id = "login-prof-icon">
+							<h1>LOGIN</h1>
+							<div class="g-signin2 login-google" data-onsuccess="onSignIn"></div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script>
+			function onSignIn(googleUser)
+			{
+				var profile = googleUser.getBasicProfile();
+				var id_token = googleUser.getAuthResponse().id_token;
+				$.post('checkUser/', {
+					idToken: id_token,
+					firstName: profile.getName().split(" ")[0],
+					lastName: profile.getName().split(" ")[1], //REMEMBER LATIN COUNTRY 4 NAMES
+					email: profile.getEmail()
+				
+				}, function(data, status){location.href = "/";});
+			}
+		</script>
+	</body>
+</html>
