@@ -20,6 +20,7 @@ var Modal = function(type)
 				$(overlay).css("background-color", "rgba(0,0,0,0.5)");
 				iframe.src = "/static/forms/" + type + ".html";
 				$(overlay).append(iframe);
+				$(overlay).onclick(function(){this.close()});
 			},
 			close: function()
 			{
@@ -27,5 +28,6 @@ var Modal = function(type)
 				$(overlay).remove();
 			}
 		};
+	tmpModal.load();
 	return tmpModal;
 }
