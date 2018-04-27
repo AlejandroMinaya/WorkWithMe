@@ -4,7 +4,7 @@ from django.template import loader
 from users.models import User
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
-from .models import Project, Task
+from .models import Project, Task, RecentActivity
 
 EMPTY_REQUEST_MSSG = "Empty Request"
 PROJECT_NOT_FOUND_MSSG = "Project not found"
@@ -70,6 +70,23 @@ def getProject(projectID):
     except:
         return None
 
+# -- CREATE RECENT ACTIVITY LOG
+# Creates a record of the action performed for future reference
+def createRecentActivity(**kwargs):
+    tmp = RecentActivity()
+    if "triggerActor" in kwargs:
+        tmp.triggerActor = kwargs["triggerActor"]
+    if "targetActor" in kwargs:
+        tmp.targetActor = kwargs["targetActor"]
+    if "project" in kwargs:
+        tmp.project = kwargs["project"]
+    if "task" in kwargs:
+        tmp.task = kwargs["task"]
+    if "action" in kwargs:
+        tmp.action = kwargs["action"]
+    tmp.save()
+
+
 # - FORM METHODS
 # -----------------------------------------------------
 # -- ADD A PROJECT
@@ -95,6 +112,7 @@ def add(request):
         newProject.save()
         newProject.members.add(_projectOwner)
         newProject.save()
+        createRecentActivity(triggerActor=user, project=newProject, action=RecentActivity.ADD_PROJECT)
         return HttpResponse("Project created")
     return HttpResponse(EMPTY_REQUEST_MSSG)
 
@@ -121,6 +139,7 @@ def delete(request):
             return verification
         if user == project.projectOwner:
             project.delete()
+            createRecentActivity(triggerActor=user, project=project, action=RecentActivity.REMOVE_PROJECT)
             return HttpResponse("Project deleted")
         return HttpREsponse(PERMISSION_DENIED_MSSG)
     return HttpResponse(EMPTY_REQUEST_MSSG)
@@ -155,6 +174,7 @@ def leave(request):
                 pass
         project.members.remove(user)
         project.save()
+        createRecentActivity(triggerActor=user, project=project, action=RecentActivity.LEAVE_PROJECT)
         return HttpResponse("User removed from group")
     return HttpResponse(EMPTY_REQUEST_MSSG)
 
@@ -175,6 +195,7 @@ def addMember(request):
             return verification
         if user in project.members.all():
             project.members.add(newMember)
+            createRecentActivity(triggerActor=user, targetActor=newMember, project=project, action=RecentActivity.ADD_MEMBER)
             return HttpResponse("User added to group")
         return HttpResponse(PERMISSION_DENIED_MSSG)
     return HttpResponse(EMPTY_REQUEST_MSSG)
@@ -196,6 +217,7 @@ def removeMember(request):
             return verification
         if user == project.projectOwner:
             project.members.remove(removedMember)
+            createRecentActivity(triggerActor=user, targetActor=newMember, project=project, action=RecentActivity.REMOVE_MEMBER)
             return HttpResponse("User removed")
         return HttpResponse(PERMISSION_DENIED_MSSG)
     return HttpResponse(EMPTY_REQUEST_MSSG)
@@ -247,6 +269,8 @@ def addTask(request):
                 responsible = user
             task.responsible = responsible
             task.save()
+            createRecentActivity(triggerActor=user, targetActor=responsible, project=project, task=task, action=RecentActivity.ASSIGN_TASK)
+            return HttpResponse("Task added")
         return HttpResponse(PERMISSION_DENIED_MSSG)
     return HttpResponse(EMPTY_REQUEST_MSSG)
 
@@ -269,6 +293,7 @@ def removeTask(request):
             return verification
         if user == task.project.projectOwner or user == task.responsible:
             task.delete()
+            createRecentActivity(triggerActor=user, project=project, task=task, action=RecentActivity.REMOVE_TASK)
             return HttpResponse("Task deleted")
         return HttpResponse(PERMISSION_DENIED_MSSG)
     return HttpResponse(EMPTY_REQUEST_MSSG)
@@ -292,9 +317,11 @@ def markTaskForVerification(request):
         if user == task.responsible:
             task.status = 0
             successMssg = "Task marked for verification"
+            createRecentActivity(triggerActor=user, project=project, task=task, action=RecentActivity.MARK_TASK)
         if user == task.project.projectOwner:
             task.status = 1
             successMssg = "Task completed"
+            createRecentActivity(triggerActor=user, project=project, task=task, action=RecentActivity.COMPLETE_TASK)
         task.save()
         return HttpResponse(successMssg)
     return HttpResponse(EMPTY_REQUEST_MSSG)
@@ -317,8 +344,12 @@ def verifyTask(request):
             successMssg = ""
             if reject:
                 task.status = 1
+                successMssg = "Task completed"
+                createRecentActivity(triggerActor=user, project=project, task=task, action=RecentActivity.COMPLETE_TASK)
             else:
                 task.status = -1
+                successMssg = "Task rejected"
+                createRecentActivity(triggerActor=user, project=project, task=task, action=RecentActivity.REJECT_TASK)
             task.save()
             return HttpResponse(successMssg)
         return HttpResponse(PERMISSION_DENIED_MSSG)
