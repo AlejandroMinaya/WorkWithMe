@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WWM - Recent Activity</title>
+	<meta name="google-signin-client_id" content="878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com">
+	{% load static %}
+	<link href="{%static "users/css/main.css"%}" rel="stylesheet">
+</head>
+<body>
+	<div class="main-container ">
+		<!-- HEADER MENU -->
+		<div id="header-menu" class="row justify">
+			<!-- LOGO AND LINKS -->
+			<nav class="row">
+				<ul class="row distribute vertical-center">
+					<li id="logo">
+						<img src="{%static "assets/logo.svg"%}"/>
+					</li>
+					<li><a href="/" class="nav-link">Dashboard</a></li>
+					<li><a href="projects" class="nav-link">Projects</a></li>
+					<li><a href="#" class = "nav-link" onclick="signOut();">Sign out</a></li>
+				</ul>
+			</nav>
+		</div>
+		<h1 id = "recent-title">
+			RECENT ACTIVITY
+		</h1>
+		<div id = "recent-category">
+			<ul>
+				<li class="recent-category-category recent-category-category-selected">
+					Matematicas
+				</li>
+				<li class="recent-category-category">
+					Ciencias
+				</li>
+			</ul>
+		</div>
+		<div id = "recent-container">
+			<div class = "recent-title">
+					matematicas
+			</div>
+			<div class = "recent-box relative">
+				<ul class = "recent-list">
+					<li class = "recent-activity">
+						generar tabla de conversiones logaritmicas						
+						<span class="recent-activity-date">18/04/2018</span>
+						<span class = "recent-activity-mod">individual</span>
+					</li>
+				</ul>
+				<div class="recent-buttons">
+							<button class="recent-activity-button-ok">ok</button>
+							<button class="recent-activity-button-check">check</button>
+				</div>
+			</div>
+			<div class = "recent-box relative">
+				<div class="recent-buttons">
+							<button class="recent-activity-button-ok">ok</button>
+							<button class="recent-activity-button-check">check</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="http://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous">
+		</script>
+		<script src="{% static "scripts/main.js" %}">
+		</script>
+
+		<script type="text/javascript">
+			function signOut() 
+			{
+				var auth2 = gapi.auth2.getAuthInstance();
+				auth2.signOut().then(function () {
+				  console.log('User signed out.');
+				});
+			 }
+		</script>
+</body>
+</html>
