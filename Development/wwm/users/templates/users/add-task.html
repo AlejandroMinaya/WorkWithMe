@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WWM - Add Task</title>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+	<div class="main-container flex">
+		<div id="header-menu" class="row justify">
+				<!-- LOGO AND LINKS -->
+				<nav class="row">
+					<ul class="row distribute vertical-center">
+						<li id="logo">
+							<img src="logo.svg"/>
+						</li>
+						<li><a href="/" class="nav-link">Dashboard</a></li>
+						<li><a href="projects" class="nav-link">Projects</a></li>
+						<li><a href="login" class = "nav-link" onclick="signOut();">Sign out</a></li>
+					</ul>
+				</nav>
+		</div>
+		<div class="add-container">
+			<h1 class="container-title">
+				New task
+			</h1>
+			<input type="name" name="project-name" class="project-name" placeholder="Task name">
+			<div class = "left-container">
+				<h2 class="mini-container-title">Due date</h2>
+				<div id="datepicker"></div>
+			</div>
+			<div class = "right-container">
+				<h2 class="mini-container-title">Task information</h2>
+				<ul class="new-task-form">
+					<li class="new-task-form-item"><select class="select-project-input">
+						<option>Select project</option>
+						<option>El macho</option>
+					</select></li>
+					<li class="new-task-form-item"><select class="select-responsible-input">
+						<option>Select responsible</option>
+						<option>Don el Mane</option>
+					</select></li>
+					<textarea class="task-description">Task description:
+					</textarea>
+					<li class="new-task-form-item"></li>
+					<li class="new-task-form-item"></li>
+				</ul>
+			</div>
+			<div class="buttons-bottom">
+					<button class="cancel-button">Cancel</button>
+					<button class="confirm-button">Confirm</button>
+			</div>
+		</div>
+	</div>
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+	<script>
+	$(function () {
+	$("#datepicker").datepicker();
+	});
+	</script>
+</body>
+</html>

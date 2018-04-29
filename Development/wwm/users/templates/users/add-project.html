@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WWM - Add Project</title>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+	{% load static %}
+	<link href="{%static "users/css/main.css"%}" rel="stylesheet">
+</head>
+<body>
+	<div class="main-container flex">
+		<div id="header-menu" class="row justify">
+				<!-- LOGO AND LINKS -->
+				<nav class="row">
+					<ul class="row distribute vertical-center">
+						<li id="logo">
+							<img src="{%static "assets/logo.svg"%}"/>
+						</li>
+						<li><a href="/" class="nav-link">Dashboard</a></li>
+						<li><a href="projects" class="nav-link">Projects</a></li>
+						<li><a href="login" class = "nav-link" onclick="signOut();">Sign out</a></li>
+					</ul>
+				</nav>
+		</div>
+		<div class="add-container">
+			<h1 class="container-title">
+				New project
+			</h1>
+			<input type="name" name="project-name" class="project-name" placeholder="Project name">
+			<div class = "left-container">
+				<h2 class="mini-container-title">Due date</h2>
+				<div id="datepicker"></div>
+			</div>
+			<div class = "right-container">
+				<h2 class="mini-container-title">Team members</h2>
+				<ul class="add-members-list">
+					<li class="add-members-item"><img src="{%static "assets/profile-icon.svg"%}" class="profile-icon-small"> <span class= "member">Juanito</span></li>
+					<li class="add-members-item"><img src="{%static "assets/profile-icon.svg"%}" class="profile-icon-small"> <span class= "member">Moro</span></li>
+					<li class="add-members-item"><img src="{%static "assets/profile-icon.svg"%}" class="profile-icon-small"> <span class= "member">Don el Mane</span></li>
+				</ul>
+			</div>
+			<div class="buttons-bottom">
+					<button class="cancel-button">Cancel</button>
+					<button class="confirm-button">Confirm</button>
+			</div>
+		</div>
+	</div>
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+	<script>
+	$(function () {
+	$("#datepicker").datepicker();
+	});
+	</script>
+</body>
+</html>
