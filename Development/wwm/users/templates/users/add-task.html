@@ -4,7 +4,8 @@
 <head>
 	<title>WWM - Add Task</title>
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
-	<link rel="stylesheet" type="text/css" href="main.css">
+	{% load static %}
+	<link href="{%static "users/css/main.css"%}" rel="stylesheet">
 </head>
 <body>
 	<div class="main-container flex">
@@ -13,7 +14,7 @@
 				<nav class="row">
 					<ul class="row distribute vertical-center">
 						<li id="logo">
-							<img src="logo.svg"/>
+							<img src="{%static "assets/logo.svg"%}"/>
 						</li>
 						<li><a href="/" class="nav-link">Dashboard</a></li>
 						<li><a href="projects" class="nav-link">Projects</a></li>
