@@ -501,3 +501,146 @@ ul
 {
 	position: relative;
 }
+
+
+/*Add project*/
+.ui-widget-content, .ui-widget-header, .ui-state-default, .ui-datepicker-header, .ui-datepicker-calendar
+{
+	background-color: white;
+	color: var(--dark-blue);
+}
+
+.add-container
+{
+	width: 90vw;
+	height: 80vh;
+	margin-top: 0;
+	position: relative;
+}
+
+.container-title
+{
+	font-size: 7vh;
+	color: var(--dark-blue);
+	text-align: center;
+}
+
+::placeholder
+{
+	color: var(--blue);
+}
+
+input.project-name
+{
+	border: 2pt solid var(--dark-blue);
+	height: 4vh;
+	font-size: 3.8vh;
+	text-align: left;
+	padding-left: 2vw;
+	position: absolute;
+	width: 80vw;
+	margin-left: 5vw;
+	margin-top: 3vh;
+	color: var(--blue);
+	border-radius: 50px;
+}
+
+.left-container, .right-container
+{
+	position: absolute;
+	width: 37.5vw;
+	height: 50vh;
+	margin-left: 5vw;
+	margin-top: 15vh;
+	/*border: solid 1pt var(--blue);*/
+}
+
+.right-container
+{
+	margin-left: 47.5vw;
+}
+
+#datepicker
+{
+	margin-left: 7vw;
+	margin-top: 5vh;
+}
+
+.mini-container-title
+{
+	font-size: 4vh;
+	color: var(--dark-blue);
+	text-align: center;
+	margin-top: 2vh;
+}
+
+.buttons-bottom
+{
+	width: 80vw;
+	height: 7vh;
+	margin-left: 5vw;
+	position: absolute;
+	bottom:-3vh;
+}
+
+.cancel-button, .confirm-button
+{
+	background-color: var(--dark-blue);
+	color: white;
+	height: 6vh;
+	width: 10vw;
+	border:none;
+	border-radius: 50px;
+	cursor: pointer;
+	font-size: 3vh;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.cancel-button
+{
+	margin-left: 20vw;
+}
+
+.profile-icon-small
+{
+	display: inline-block;
+	width: 5vw;
+	height: 8vh;
+}
+
+.confirm-button
+{
+	margin-left: 20vw;
+}
+
+ul.add-members-list
+{
+	position: relative;
+	border-radius: 30px;
+	border: 2pt solid var(--blue);
+	width: 35vw;
+	height: 33vh;
+	margin-top: 5vh;
+	padding: 1vh 1vw;
+}
+
+.add-members-item
+{
+	position: relative;
+	width: inherit;
+	height: 8vh;
+	text-align: left;
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.add-members-item .member
+{
+	color: var(--dark-blue);
+	font-size: 3vh;
+	margin-bottom: 20vh;
+	position: absolute;
+	left: 6vw;
+	top: 2vh;
+}
