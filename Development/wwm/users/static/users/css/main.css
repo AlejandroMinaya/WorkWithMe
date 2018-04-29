@@ -614,7 +614,7 @@ input.project-name
 	margin-left: 20vw;
 }
 
-ul.add-members-list
+ul.add-members-list, ul.new-task-form
 {
 	position: relative;
 	border-radius: 30px;
@@ -623,6 +623,13 @@ ul.add-members-list
 	height: 33vh;
 	margin-top: 5vh;
 	padding: 1vh 1vw;
+}
+
+ul.new-task-form
+{
+	width: 45vw;
+	margin-left: -5vw;
+	border: none;
 }
 
 .add-members-item
@@ -643,4 +650,37 @@ ul.add-members-list
 	position: absolute;
 	left: 6vw;
 	top: 2vh;
+}
+
+.select-project-input,.select-responsible-input
+{
+	padding-left: 2vw;
+	color: var(--dark-blue);
+	font-size: 3.4vh;
+	width: 40vw;
+	border: 1pt solid var(--blue);
+	position: absolute;
+	border-radius: 40px;
+	left: 3vw;
+	top: 0vh;
+}
+
+.select-responsible-input
+{
+	top: 7vh;
+}
+
+.task-description
+{
+	padding-left: 0.5vw;
+	color: var(--dark-blue);
+	font-size: 2vh;
+	width: 39.4vw;
+	height: 20vh;
+	text-align: left;
+	border: 1pt solid var(--blue);
+	position: absolute;
+	border-radius: 20px;
+	left: 3vw;
+	top: 14vh;
 }
