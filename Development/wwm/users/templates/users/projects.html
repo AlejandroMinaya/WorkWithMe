@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WWM - Projects</title>
+	{% load static %}
+	<link href="{%static "users/css/main.css"%}" rel="stylesheet">
+	<link href="{%static "users/css/circle.css"%}" rel="stylesheet">
+	<meta name="google-signin-client_id" content="878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com">
+	<link href="main.css" rel="stylesheet">
+	<link href="circle.css" rel="stylesheet">
+</head>
+<body>
+	<div class="main-container flex">
+		<!-- HEADER MENU -->
+		<div id="header-menu" class="row justify">
+			<!-- LOGO AND LINKS -->
+			<nav class="row">
+				<ul class="row distribute vertical-center">
+					<li id="logo">
+						<img src="{%static "assets/logo.svg"%}"/>
+					</li>
+					<li><a href="/" class="nav-link">Dashboard</a></li>
+					<li><a href="projects" class="nav-link">Projects</a></li>
+					<li><a href="#" class = "nav-link" onclick="signOut();">Sign out</a></li>
+				</ul>
+			</nav>
+		</div>
+		<div id = "project-container">
+			<h1>
+				PROJECTS
+			</h1>
+			<div class = "project-box">
+				<div class="c100 p25">
+                    <span class="per">25%</span>
+                    <div class="slice">
+                        <div class="bar"></div>
+                        <div class="fill"></div>
+                    </div>
+                </div>
+				<div class="project-project-left">
+					<span class="project-project-text"><span class="project-project-text-title">nombre de proyecto:</span> la verdad del mundo</span>
+					<span class="project-project-text"><span class="project-project-text-title">miembros:</span> a01703442</span>
+					<span class="project-project-text"><span class="project-project-text-title">materia:</span> fdi</span>
+
+				</div>
+				<div class="project-project-right">
+					<span class="project-project-text"><span class="project-project-text-title">Ultima edicion:</span> 18/04/2018</span>
+					<span class="project-project-text"><span class="project-project-text-title">Fecha de entrega:</span> 18/04/2018</span>
+				</div>
+			</div>
+			<div class = "project-box">
+				<div class="c100 p76">
+                    <span class="per">76%</span>
+                    <div class="slice">
+                        <div class="bar"></div>
+                        <div class="fill"></div>
+                    </div>
+                </div>
+				<div class="project-project-left">
+					<span class="project-project-text"><span class="project-project-text-title">nombre de proyecto:</span> la verdad del mundo</span>
+					<span class="project-project-text"><span class="project-project-text-title">miembros:</span> a01703442</span>
+					<span class="project-project-text"><span class="project-project-text-title">materia:</span> fdi</span>
+
+				</div>
+				<div class="project-project-right">
+					<span class="project-project-text"><span class="project-project-text-title">Ultima edicion:</span> 18/04/2018</span>
+					<span class="project-project-text"><span class="project-project-text-title">Fecha de entrega:</span> 18/04/2018</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="http://code.jquery.com/jquery-3.3.1.min.js"
+		  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+		  crossorigin="anonymous">
+	</script>
+	<script src="{% static "scripts/main.js" %}">
+	</script>
+
+	<script type="text/javascript">
+		function signOut() 
+		{
+			var auth2 = gapi.auth2.getAuthInstance();
+			auth2.signOut().then(function () {
+			  console.log('User signed out.');
+			});
+		 }
+	</script>
+</body>
+</html>

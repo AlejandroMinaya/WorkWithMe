@@ -2,7 +2,6 @@
 <html>
 	<head>
 		<title>WWM - Dashboard</title>
-		<meta name="google-signin-client_id" content="878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com">
 		{% load static %}
 		<link href="{%static "users/css/main.css"%}" rel="stylesheet">
 	</head>
@@ -19,7 +18,7 @@
 						</li>
 						<li><a href="/" class="nav-link">Dashboard</a></li>
 						<li><a href="projects" class="nav-link">Projects</a></li>
-						<li><a href="login" class = "nav-link" onclick="signOut();">Sign out</a></li>
+						<li><a href="#" onclick="signOut();">Sign out</a></li>
 					</ul>
 				</nav>
 			</div>
@@ -70,7 +69,7 @@
 						{% endfor %}
 					</div>
 					<div class="flex widget-quick-access">
-						<a href="javascript:void(0)" onclick="Modal('addProject')"><img src="{%static "assets/add-icon.svg" %}"/></a>
+						<a href="javascript:void(0)"><img src="{%static "assets/add-icon.svg" %}"/></a>
 					</div>
 				</div>
 			</div>
