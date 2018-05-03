@@ -10,7 +10,7 @@
 	<body>
 		<div class="main-container flex">
 			<!-- HEADER MENU -->
-			<div id="header-menu" class="row justify">
+			<div id="header-menu" class="row justify vertical-center">
 				<!-- LOGO AND LINKS -->
 				<nav class="row">
 					<ul class="row distribute vertical-center">
@@ -18,18 +18,18 @@
 							<img src="{%static "assets/logo.svg"%}"/>
 						</li>
 						<li><a href="/" class="nav-link">Dashboard</a></li>
-						<li><a href="projects" class="nav-link">Projects</a></li>
-						<li><a href="#" class = "nav-link" onclick="signOut();">Sign out</a></li>
+						<li><a href="/projects/projects" class="nav-link">Projects</a></li>
 					</ul>
 				</nav>
+					<a href="javascript:void(0)" class="nav-link" onclick="signOut();">Sign out</a>
 			</div>
 			<div id = "task-container">
 				<h1>
-					PROJECT
+					{{project.name}}
 				</h1>
 				<div class = "task-box">
 					<div class = "task-title">
-						{{project.name}}
+						TASKS
 					</div>
 					<ul class = "task-list">
 						{% for task in project.task_set.all %}

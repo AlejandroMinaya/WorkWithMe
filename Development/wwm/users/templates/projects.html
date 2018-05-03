@@ -12,7 +12,7 @@
 <body>
 	<div class="main-container flex">
 		<!-- HEADER MENU -->
-		<div id="header-menu" class="row justify">
+		<div id="header-menu" class="row justify vertical-center">
 			<!-- LOGO AND LINKS -->
 			<nav class="row">
 				<ul class="row distribute vertical-center">
@@ -20,15 +20,16 @@
 						<img src="{%static "assets/logo.svg"%}"/>
 					</li>
 					<li><a href="/" class="nav-link">Dashboard</a></li>
-					<li><a href="projects" class="nav-link">Projects</a></li>
-					<li><a href="#" class = "nav-link" onclick="signOut();">Sign out</a></li>
+					<li><a href="/projects/projects" class="nav-link">Projects</a></li>
 				</ul>
 			</nav>
+				<a href="javascript:void(0)" class="nav-link" onclick="signOut();">Sign out</a>
 		</div>
-		<div id = "project-container">
+		<div id = "project-container" class="flex">
 			<h1>
 				PROJECTS
 			</h1>
+			<a href="javascript:void(0)" onclick="Modal('add-project')" style="text-align: center;flex: 0 0 100%;font-size:3vh">New Project</a>
 			{% for project in projects %}
 				<div class = "project-box">
 					<div class="c100 p{{project.getIntProgress}}">
@@ -39,15 +40,14 @@
 						</div>
 					</div>
 					<div class="project-project-left">
-						<span class="project-project-text"><span class="project-project-text-title">Nombre de proyecto:</span><br><a href=""{{project.name}}</span>
+						<span class="project-project-text"><span class="project-project-text-title">Nombre de proyecto:</span><br><a href="/project/{{project.id}}">{{project.name}}</a></span>
 						<span class="project-project-text"><span class="project-project-text-title">Miembros:</span>
 							{% for member in project.members.all %}
-								<br> {{member.firstName}} {{member.lastName}} </br>
+								<br> • {{member.firstName}} {{member.lastName}}
 							{% endfor %}
 						</span>
 					</div>
 					<div class="project-project-right">
-						<span class="project-project-text"><span class="project-project-text-title">Ultima edición:</span> {{lastActive}} </span>
 						<span class="project-project-text"><span class="project-project-text-title">Fecha de entrega:</span> {{project.dueDate}} </span>
 					</div>
 				</div>

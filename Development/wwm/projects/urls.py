@@ -12,4 +12,5 @@ urlpatterns = [
             path('removeMember', views.removeMember),
             path('<int:project_id>', views.seeProject),
             path('projects', views.projects),
+            path('getUserProjects', views.getUserProjects),
         ]

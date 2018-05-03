@@ -51,7 +51,7 @@ class RecentActivity(models.Model):
         mssg = self.action
         if (mssg == self.ADD_TASK or mssg == self.REMOVE_TASK):
             return mssg % (self.triggerActor.firstName, self.task.name)
-        if(mssg == self.MARK_TASK or mssg == self.COMPLETE_TASK or mssg == self.REJECT_TASK or mssg == self.UNMARK_TASK):
+        if(mssg == self.MARK_TASK or mssg == self.REJECT_TASK or mssg == self.UNMARK_TASK):
             return mssg % (self.triggerActor.firstName, self.task.name, self.project.id)
         if(mssg == self.REMOVE_PROJECT or mssg == self.LEAVE_PROJECT):
             return mssg % (self.triggerActor.firstName, self.project.name)
@@ -63,4 +63,7 @@ class RecentActivity(models.Model):
             return mssg % (self.targetActor.firstName, self.project.name, self.project.id)
         if(mssg == self.ASSIGN_TASK):
             return mssg % (self.triggerActor.firstName, self.targetActor.firstName, self.task.name, self.project.id)
+        if(mssg == self.COMPLETE_TASK):
+            return mssg % (self.triggerActor.firstName, self.project.id, self.task.name)
+
                 

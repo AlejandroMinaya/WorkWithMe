@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WWM - Add Project</title>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+	<link href="../users/css/main.css" rel="stylesheet">
+</head>
+<body>
+	<div class="main-container flex">
+		<div class="add-container">
+			<form action="/projects/add" method="post">
+				<h1 class="container-title">
+					New project
+				</h1>
+				<input type="text" name="name" class="project-name" placeholder="Project name">
+				<div class = "left-container">
+					<h2 class="mini-container-title">Due date</h2>
+					<div id="datepicker"></div>
+					<input type="hidden" name="dueYear" id="dueYear">
+					<input type="hidden" name="dueMonth" id="dueMonth">
+					<input type="hidden" name="dueDay" id="dueDay">
+				</div>
+				<div class = "right-container">
+					<h2 class="mini-container-title">Team members</h2>
+					<ul class="add-members-list">
+						<li class="add-members-item"><img src="../assets/profile-icon.svg" class="profile-icon-small"> <span class= "member">Juanito</span></li>
+						<li class="add-members-item"><img src="../assets/profile-icon.svg" class="profile-icon-small"> <span class= "member">Moro</span></li>
+						<li class="add-members-item"><img src="../assets/profile-icon.svg" class="profile-icon-small"> <span class= "member">Don el Mane</span></li>
+					</ul>
+				</div>
+				<div class="buttons-bottom">
+						<input type="submit" value="Confirm" class="confirm-button">
+				</div>
+			</form>
+		</div>
+	</div>
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+	<script>
+	$("#datepicker").mouseover(function()
+		{
+			var date = $("#datepicker").datepicker("getDate");
+			$("#dueYear").val(date.getFullYear());
+			$("#dueMonth").val(date.getMonth() + 1);
+			$("#dueDay").val(date.getDate());
+		
+		});
+	$(function () {
+	$("#datepicker").datepicker();
+	});
+	</script>
+</body>
+</html>

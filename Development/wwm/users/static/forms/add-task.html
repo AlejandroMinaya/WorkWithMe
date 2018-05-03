@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WWM - Add Task</title>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+	<link href="../users/css/main.css" rel="stylesheet">
+</head>
+<body>
+	<div class="main-container flex">
+		<div class="add-container">
+			<h1 class="container-title">
+				New task
+			</h1>
+			<form action="/tasks/add" method="post">
+			<input type="name" name="project-name" class="project-name" placeholder="Task name">
+			<div class = "left-container">
+				<h2 class="mini-container-title">Due date</h2>
+				<div id="datepicker"></div>
+			</div>
+			<div class = "right-container">
+				<h2 class="mini-container-title">Task information</h2>
+				<ul class="new-task-form">
+					<li class="new-task-form-item">
+						<select class="select-project-input" id="project" name="projectID">
+							<option>Select project</option>
+							<option>El macho</option>
+						</select>
+					</li>
+					<li class="new-task-form-item">
+						<select class="select-responsible-input" id="responsible" name="responsibleID">
+							<option>Select responsible</option>
+							<option>Don el Mane</option>
+						</select>
+					</li>
+					<textarea class="task-description" placeholder="Description"></textarea>
+					<li class="new-task-form-item"></li>
+					<li class="new-task-form-item"></li>
+				</ul>
+			</div>
+			<div class="buttons-bottom center">
+					<input type="submit" class="confirm-button" value="Confirm">
+			</div>
+				<input type="hidden" name="dueYear" id="dueYear">
+				<input type="hidden" name="dueMonth" id="dueMonth">
+				<input type="hidden" name="dueDay" id="dueDay">
+			</form>
+		</div>
+	</div>
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+	<script>
+	//AJAX FOR SELECTS
+	$.post("/projects/getUserProjects", {}, function(data)
+		{
+			console.log(data);
+			data = $.parseJSON(data)
+			var amountProjects = data.projectID.length;
+			for(var i = 0; i < amountProjects-1; i++)
+			{
+				var el = document.createElement("option");
+				el.value = data.projectID[i];
+				el.innerHTML = data.projectName[i];
+				$("#project").append(el);
+			
+			}
+		
+		});
+	$.post("/projects/getMembers", {projectID: $("#project").val()}, function(data){
+		
+	});
+	$("#datepicker").mouseover(function()
+		{
+			var date = $("#datepicker").datepicker("getDate");
+			$("#dueYear").val(date.getFullYear());
+			$("#dueMonth").val(date.getMonth() + 1);
+			$("#dueDay").val(date.getDate());
+		
+		});
+	$(function () {
+	$("#datepicker").datepicker();
+	});
+	</script>
+</body>
+</html>

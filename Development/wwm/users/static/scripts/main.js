@@ -20,6 +20,12 @@ var Modal = function(type)
 				$(overlay).css("left", "0");
 				$(overlay).css("background-color", "rgba(0,0,0,0.5)");
 				iframe.src = "/static/forms/" + type + ".html";
+				$(iframe).css("height", "80vh");
+				$(iframe).css("width", "80vw");
+				$(iframe).css("background-color", "#fff");
+				$(iframe).css("border-radius", "50px");
+				$(iframe).css("border", "none");
+				$(iframe).css("box-shadow", "0 0 10px 0 rgba(0,0,0,.3)");
 				$(overlay).append(iframe);
 				$(overlay).click(function(){modal.close()});
 			},

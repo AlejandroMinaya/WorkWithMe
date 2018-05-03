@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from users.models import User
 from datetime import date
@@ -14,10 +14,7 @@ PERMISSION_DENIED_MSSG = "This user is not the owner of the project"
 
 # IMPORTANT !!!!#
 # Most of the methods at the end will have to create a RecentActivity object
-# to keep historical record of what has been done
-#
-# Also, we need the award system to be in place
-
+# to keep historical record of what has been done # # Also, we need the award system to be in place 
     
 
 # Create your views here.
@@ -218,6 +215,22 @@ def addMember(request):
             return HttpResponse("User added to group")
         return HttpResponse(PERMISSION_DENIED_MSSG)
     return HttpResponse(EMPTY_REQUEST_MSSG)
+
+@csrf_exempt
+def getUserProjects(request):
+    if request.method == 'POST':
+        user = getUser(request.session["userID"])
+        if user == None:
+            return HttpResponse("None")
+        data = "{\"projectID\":["
+        for project in user.project_set.all():
+            data += "\"" + str(project.id) + "\"" + ","
+        data += "\"0\"],"
+        data += "\"projectName\":["
+        for project in user.project_set.all():
+            data += "\"" + project.name + "\"" + ","
+        data += "\"\"]}"
+        return JsonResponse(data, safe=False)
 
 # -- REMOVE MEMBER TO PROJECT
 # Removes a member from a project by the project owner.

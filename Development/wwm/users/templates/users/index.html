@@ -18,7 +18,7 @@
 							<img src="{%static "assets/logo.svg"%}"/>
 						</li>
 						<li><a href="/" class="nav-link">Dashboard</a></li>
-						<li><a href="projects" class="nav-link">Projects</a></li>
+						<li><a href="/projects/projects" class="nav-link">Projects</a></li>
 					</ul>
 				</nav>
 					<a href="javascript:void(0)" class="nav-link" onclick="signOut();">Sign out</a>
@@ -55,7 +55,7 @@
 						{% endfor %}
 					</div>
 					<div class="flex widget-quick-access">
-						<a href="javascript:void(0)"><img src="{%static "assets/add-icon.svg" %}"/></a>
+						<a href="javascript:void(0)" onclick="Modal('add-task')"><img src="{%static "assets/add-icon.svg" %}"/></a>
 					</div>
 				</div>
 				<div class="widget flex vertical-top">
@@ -83,7 +83,7 @@
 						{% endfor %}
 					</div>
 					<div class="flex widget-quick-access">
-						<a href="javascript:void(0)" onclick="Modal('addProject')"><img src="{%static "assets/add-icon.svg" %}"/></a>
+						<a href="javascript:void(0)" onclick="Modal('add-project')"><img src="{%static "assets/add-icon.svg" %}"/></a>
 					</div>
 				</div>
 			</div>
