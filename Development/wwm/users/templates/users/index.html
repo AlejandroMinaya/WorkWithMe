@@ -10,7 +10,7 @@
 		<!-- DASHBOARD -->
 		<div class="main-container flex">
 			<!-- HEADER MENU -->
-			<div id="header-menu" class="row justify">
+			<div id="header-menu" class="row justify vertical-center">
 				<!-- LOGO AND LINKS -->
 				<nav class="row">
 					<ul class="row distribute vertical-center">
@@ -19,14 +19,20 @@
 						</li>
 						<li><a href="/" class="nav-link">Dashboard</a></li>
 						<li><a href="projects" class="nav-link">Projects</a></li>
-						<li><a href="login" class = "nav-link" onclick="signOut();">Sign out</a></li>
 					</ul>
 				</nav>
+					<span>Welcome, {{user.firstName}}</span>
+					<a href="javascript:void(0)" class="nav-link" onclick="signOut();">Sign out</a>
 			</div>
 			<div class="row distribute">
 				<div class="widget flex vertical-top">
 					<h1>Recent Activity</h1>
-					<div class="flex widget-content vertical-distribute">
+					<div class="flex widget-content vertical-top">
+						{% for recent in recentActivity %}
+							<div class="flex justify recent-activity">
+								{{recent.getMessage | safe}}
+							</div>
+						{% endfor %}
 					</div>
 					<div class="flex widget-quick-access">
 					</div>
@@ -36,7 +42,15 @@
 					<div class="flex widget-content vertical-top">
 						{% for task in user.task_set.all %}
 						<div class="row task">
-							<div class="complete-button"></div>
+							<img class="task-button" onclick="markTaskForVerification({{task.id}});"  src="
+							{%if task.status == -1%}
+							{%static "assets/incomplete-icon.svg"%}
+							{% elif task.status == 0%}
+							{%static "assets/pending-icon.svg"%}
+							{% else %}
+							{%static "assets/completed-icon.svg"%}
+							{%endif%}
+							">
 							<p>{{task.name}}</p>
 						</div>
 						{% endfor %}
@@ -51,7 +65,7 @@
 						{% for project in user.project_set.all %}
 						<div class="flex project">
 							<div class="row justify">
-								<h3>{{project.name}}</h3>
+								<h3><a href="/projects/{{project.id}}">{{project.name}}</a></h3>
 								<p>{{project.dueDate}}</p>
 							</div>
 							<div class="flex left progress">
@@ -75,19 +89,35 @@
 				</div>
 			</div>
 		</div>
-		<script src="http://code.jquery.com/jquery-3.3.1.min.js"
-			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-			  crossorigin="anonymous">
-		</script>
+		<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="{% static "scripts/main.js" %}">
 		</script>
 
 		<script type="text/javascript">
+			//SIGNOUT
+			if(typeof gapi == 'undefined')
+			{
+				init()
+			}
+			else if(typeof gapi.auth2 == 'undefined')
+			{
+				init()
+			}
+			function init()
+			{
+				gapi.load('auth2', function(){
+					gapi.auth2.init(
+						{client_id: '878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com'
+						});
+				});
+			}
 			function signOut() 
 			{
 				var auth2 = gapi.auth2.getAuthInstance();
 				auth2.signOut().then(function () {
 				  console.log('User signed out.');
+					location.href = "/logout";
 				});
 			 }
 		</script>

@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from .models import User
+from projects.models import RecentActivity
 
 # Create your views here.
 
@@ -15,11 +16,15 @@ def index(request):
         if request.session['userID'] == None:
             redirect('/login')
         template = loader.get_template('users/index.html')
-        contextUser = User.objects.get(id=request.session['userID'])
+        contextUser = User.objects.get(id=request.session['userID'])  
+        recentActivity = []
+        for project in contextUser.project_set.all():
+            for recent in project.recentactivity_set.all():
+                recentActivity.append(recent)
+        recentActivity.sort(key=lambda x: x.timestamp, reverse=True)
         context = {
                 'user': contextUser,
-                'tasks': contextUser.task_set.all(),
-                'projects': contextUser.project_set.all()
+                'recentActivity': recentActivity,
         }
         return HttpResponse(template.render(context, request))
     except KeyError:

@@ -171,11 +171,16 @@ ul
 	overflow-y: auto;
 }
 
+.widget-content > *
+{
+	flex: 0 0 100%;
+	margin: calc(30 * var(--screen-ratio));
+}
+
 /* WIDGET CONTENT */
 .project
 {
 	flex: 0 0 99%;
-	margin: calc(30 * var(--screen-ratio));
 }
 
 .project h3
@@ -219,13 +224,13 @@ ul
 /* SPECIFIC STYLE */
 #header-menu
 {
-	margin: calc(30 * var(--screen-ratio)) 0;
+	margin: calc(30 * var(--screen-ratio)) calc(80 * var(--screen-ratio));
 }
 
 #header-menu nav ul
 {
 	width: calc(555 * var(--screen-ratio));
-	padding: 0 calc(80 * var(--screen-ratio));
+/*	padding: 0 calc(80 * var(--screen-ratio)); */
 }
 
 #logo
@@ -325,14 +330,33 @@ ul
 	text-transform: uppercase;
 }
 
+.task-button
+{
+	flex: 0 0 calc(45* var(--screen-ratio));
+	height: calc(25 * var(--screen-ratio));
+	cursor: pointer;
+
+}
+
 .task-task, .recent-activity
 {
-	margin-left: 1.5vw;
-	margin-top: 2vh;
+ /* margin-left: 1.5vw; */
+ /*	margin-top: 2vh; */
 	color: var(--dark-blue);
 	font-size: 3vh;
-	text-transform: uppercase;
-	list-style-type: circle;
+	/* text-transform: uppercase; */
+	/* list-style-type: circle; */
+}
+
+.recent-activity
+{
+	font-size: 3vh;
+}
+
+.recent-activity > a
+{
+	font-size: 80%;
+	flex-basis: 100%;
 }
 
 .task-task-date, .recent-activity-date
@@ -340,7 +364,7 @@ ul
 	margin-left: 0.5vw;
 	color: var(--dark-blue);
 	font-size: 3.2vh;
-	text-transform: uppercase;
+	/* text-transform: uppercase;*/
 	font-weight: 700;
 }
 
@@ -349,7 +373,7 @@ ul
 	margin-left: 0.5vw;
 	color: var(--dark-blue);
 	font-size: 3.2vh;
-	text-transform: uppercase;
+	/* text-transform: uppercase;*/
 	font-weight: 500;
 	text-decoration: underline;
 }
@@ -380,7 +404,7 @@ ul
 .project-project-text
 {
 	display: block;
-	text-transform: uppercase;
+	/* text-transform: uppercase;*/
 	color: var(--dark-blue);
 	font-weight: 400;
 	font-size: 2.5vh;
@@ -420,7 +444,7 @@ ul
 {
 	text-decoration: none;
 	list-style: none;
-	text-transform: uppercase;
+	/* text-transform: uppercase;*/
 	color: var(--dark-blue);
 	font-size: 4vh;
 	font-weight: 600;
@@ -478,7 +502,7 @@ ul
 
 .recent-activity-button-ok, .recent-activity-button-check
 {
-	text-transform: uppercase;
+	/* text-transform: uppercase;*/
 	border: none;
 	width: 10vw;
 	color: white;

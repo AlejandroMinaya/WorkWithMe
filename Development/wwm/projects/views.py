@@ -293,7 +293,7 @@ def removeTask(request):
             return verification
         if user == task.project.projectOwner or user == task.responsible:
             task.delete()
-            createRecentActivity(triggerActor=user, project=project, task=task, action=RecentActivity.REMOVE_TASK)
+            createRecentActivity(triggerActor=user, project=task.project, task=task, action=RecentActivity.REMOVE_TASK)
             return HttpResponse("Task deleted")
         return HttpResponse(PERMISSION_DENIED_MSSG)
     return HttpResponse(EMPTY_REQUEST_MSSG)
@@ -315,13 +315,18 @@ def markTaskForVerification(request):
             return HttpResponse(PERMISSION_DENIED_MSSG)
         successMssg = ""
         if user == task.responsible:
-            task.status = 0
-            successMssg = "Task marked for verification"
-            createRecentActivity(triggerActor=user, project=project, task=task, action=RecentActivity.MARK_TASK)
-        if user == task.project.projectOwner:
+            if task.status == 0:
+                task.status = -1
+                successMssg = "Task unmarked for verification"
+                createRecentActivity(triggerActor=user, project=task.project, task=task, action=RecentActivity.UNMARK_TASK)
+            else:
+                task.status = 0
+                successMssg = "Task marked for verification"
+                createRecentActivity(triggerActor=user, project=task.project, task=task, action=RecentActivity.MARK_TASK)
+        if user == task.project.projectOwner and user != task.responsible:
             task.status = 1
             successMssg = "Task completed"
-            createRecentActivity(triggerActor=user, project=project, task=task, action=RecentActivity.COMPLETE_TASK)
+            createRecentActivity(triggerActor=user, project=task.project, task=task, action=RecentActivity.COMPLETE_TASK)
         task.save()
         return HttpResponse(successMssg)
     return HttpResponse(EMPTY_REQUEST_MSSG)
@@ -331,6 +336,7 @@ def markTaskForVerification(request):
 #
 # Needs the POST argumets
 #   > taskID
+#   > reject
 @csrf_exempt
 def verifyTask(request):
     if request.method == 'POST':
@@ -345,11 +351,11 @@ def verifyTask(request):
             if reject:
                 task.status = 1
                 successMssg = "Task completed"
-                createRecentActivity(triggerActor=user, project=project, task=task, action=RecentActivity.COMPLETE_TASK)
+                createRecentActivity(triggerActor=user, project=task.project, task=task, action=RecentActivity.COMPLETE_TASK)
             else:
                 task.status = -1
                 successMssg = "Task rejected"
-                createRecentActivity(triggerActor=user, project=project, task=task, action=RecentActivity.REJECT_TASK)
+                createRecentActivity(triggerActor=user, project=task.project, task=task, action=RecentActivity.REJECT_TASK)
             task.save()
             return HttpResponse(successMssg)
         return HttpResponse(PERMISSION_DENIED_MSSG)
