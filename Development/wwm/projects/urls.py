@@ -10,4 +10,6 @@ urlpatterns = [
             path('delete', views.delete),
             path('addMember', views.addMember),
             path('removeMember', views.removeMember),
+            path('<int:project_id>', views.seeProject),
+            path('projects', views.projects),
         ]

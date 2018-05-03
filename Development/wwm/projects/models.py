@@ -11,6 +11,9 @@ class Project(models.Model):
     projectOwner = models.ForeignKey(User, on_delete= models.CASCADE, related_name="ProjectOwner")
     dueDate = models.DateField(default=date(1999, 1, 21))
 
+    def getIntProgress(self):
+        return int(self.progress)
+
 
 class Task(models.Model):
     name = models.CharField(max_length=255)

@@ -25,9 +25,28 @@ PERMISSION_DENIED_MSSG = "This user is not the owner of the project"
 # HTML PAGES
 # =====================================================
 def index(request):
-    template = loader('index.html')
+    template = loader.get_template('index.html')
     context = {}
     return HttpResponse("index")
+
+def seeProject(request, project_id):
+    template = loader.get_template('tasks.html')
+    project = getProject(project_id)
+    if project == None:
+        return HttpResponse("Project Not Found")
+    context = {
+        'project': project,
+    }
+    return HttpResponse(template.render(context, request))
+
+def projects(request):
+    template = loader.get_template('projects.html')
+    projects = getUser(request.session['userID']).project_set.all()
+    context = {
+        'projects': projects,
+    }
+    return HttpResponse(template.render(context, request))
+
 
 
 # GENERAL MANAGEMENT METHODS

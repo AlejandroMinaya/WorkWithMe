@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tasks</title>
+	<meta name="google-signin-client_id" content="878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com">
+	{% load static %}
+	<link href="{%static "users/css/main.css"%}" rel="stylesheet">
+	<title>WWM - {{project.name}}</title>
+</head>
+	<body>
+		<div class="main-container flex">
+			<!-- HEADER MENU -->
+			<div id="header-menu" class="row justify">
+				<!-- LOGO AND LINKS -->
+				<nav class="row">
+					<ul class="row distribute vertical-center">
+						<li id="logo">
+							<img src="{%static "assets/logo.svg"%}"/>
+						</li>
+						<li><a href="/" class="nav-link">Dashboard</a></li>
+						<li><a href="projects" class="nav-link">Projects</a></li>
+						<li><a href="#" class = "nav-link" onclick="signOut();">Sign out</a></li>
+					</ul>
+				</nav>
+			</div>
+			<div id = "task-container">
+				<h1>
+					PROJECT
+				</h1>
+				<div class = "task-box">
+					<div class = "task-title">
+						{{project.name}}
+					</div>
+					<ul class = "task-list">
+						{% for task in project.task_set.all %}
+						<li class = "task-task">
+							<img class="task-button" onclick="markTaskForVerification({{task.id}});"  src="
+							{%if task.status == -1%}
+							{%static "assets/incomplete-icon.svg"%}
+							{% elif task.status == 0%}
+							{%static "assets/pending-icon.svg"%}
+							{% else %}
+							{%static "assets/completed-icon.svg"%}
+							{%endif%}
+							">
+							{{task.name}}
+							<span class="task-task-date">{{task.dueDate}}</span>
+							<span class = "task-task-mod">{{task.responsible.firstName}} {{task.responsible.lastName}}</span>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="{% static "scripts/main.js" %}">
+		</script>
+
+		<script type="text/javascript">
+			//SIGNOUT
+			if(typeof gapi == 'undefined')
+			{
+				init()
+			}
+			else if(typeof gapi.auth2 == 'undefined')
+			{
+				init()
+			}
+			function init()
+			{
+				gapi.load('auth2', function(){
+					gapi.auth2.init(
+						{client_id: '878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com'
+						});
+				});
+			}
+			function signOut() 
+			{
+				var auth2 = gapi.auth2.getAuthInstance();
+				auth2.signOut().then(function () {
+				  console.log('User signed out.');
+					location.href = "/logout";
+				});
+			 }
+		</script>
+	</body>
+</html>

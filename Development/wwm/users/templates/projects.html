@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WWM - Projects</title>
+	{% load static %}
+	<link href="{%static "users/css/main.css"%}" rel="stylesheet">
+	<link href="{%static "users/css/circle.css"%}" rel="stylesheet">
+	<meta name="google-signin-client_id" content="878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com">
+	<link href="main.css" rel="stylesheet">
+	<link href="circle.css" rel="stylesheet">
+</head>
+<body>
+	<div class="main-container flex">
+		<!-- HEADER MENU -->
+		<div id="header-menu" class="row justify">
+			<!-- LOGO AND LINKS -->
+			<nav class="row">
+				<ul class="row distribute vertical-center">
+					<li id="logo">
+						<img src="{%static "assets/logo.svg"%}"/>
+					</li>
+					<li><a href="/" class="nav-link">Dashboard</a></li>
+					<li><a href="projects" class="nav-link">Projects</a></li>
+					<li><a href="#" class = "nav-link" onclick="signOut();">Sign out</a></li>
+				</ul>
+			</nav>
+		</div>
+		<div id = "project-container">
+			<h1>
+				PROJECTS
+			</h1>
+			{% for project in projects %}
+				<div class = "project-box">
+					<div class="c100 p{{project.getIntProgress}}">
+						<span class="per">{{project.getIntProgress}}%</span>
+						<div class="slice">
+							<div class="bar"></div>
+							<div class="fill"></div>
+						</div>
+					</div>
+					<div class="project-project-left">
+						<span class="project-project-text"><span class="project-project-text-title">Nombre de proyecto:</span><br><a href=""{{project.name}}</span>
+						<span class="project-project-text"><span class="project-project-text-title">Miembros:</span>
+							{% for member in project.members.all %}
+								<br> {{member.firstName}} {{member.lastName}} </br>
+							{% endfor %}
+						</span>
+					</div>
+					<div class="project-project-right">
+						<span class="project-project-text"><span class="project-project-text-title">Ultima edición:</span> {{lastActive}} </span>
+						<span class="project-project-text"><span class="project-project-text-title">Fecha de entrega:</span> {{project.dueDate}} </span>
+					</div>
+				</div>
+			{% endfor %}
+		<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="{% static "scripts/main.js" %}">
+		</script>
+
+		<script type="text/javascript">
+			//SIGNOUT
+			if(typeof gapi == 'undefined')
+			{
+				init()
+			}
+			else if(typeof gapi.auth2 == 'undefined')
+			{
+				init()
+			}
+			function init()
+			{
+				gapi.load('auth2', function(){
+					gapi.auth2.init(
+						{client_id: '878193192072-cgl83u25orrhurjapo162hm3npg9801k.apps.googleusercontent.com'
+						});
+				});
+			}
+			function signOut() 
+			{
+				var auth2 = gapi.auth2.getAuthInstance();
+				auth2.signOut().then(function () {
+				  console.log('User signed out.');
+					location.href = "/logout";
+				});
+			 }
+		</script>
+	</body>
+</html>
